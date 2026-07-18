@@ -1,258 +1,256 @@
-# Healthcare Data Engineering Pipeline
+<div align="center">
 
-A complete end-to-end **Data Engineering** project demonstrating the lifecycle of a healthcare data pipeline — from raw data ingestion through ETL processing, database storage, SQL analytics, machine learning, and visualization.
+# 🏥 CareFlow — Healthcare Data Engineering Pipeline
 
-## Architecture
+**An end-to-end data pipeline that ingests, transforms, stores, analyzes, and visualizes 10,000+ patient records — from raw CSV to interactive dashboard.**
+
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)](https://python.org)
+[![AWS S3](https://img.shields.io/badge/AWS_S3-Data_Lake-FF9900?style=flat&logo=amazons3&logoColor=white)](https://aws.amazon.com/s3/)
+[![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?style=flat&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![Airflow](https://img.shields.io/badge/Apache_Airflow-Orchestration-017CEE?style=flat&logo=apacheairflow&logoColor=white)](https://airflow.apache.org/)
+[![Scikit‑learn](https://img.shields.io/badge/Scikit--learn-ML-F7931E?style=flat&logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io/)
+
+</div>
+
+---
+
+## 📌 What Is This?
+
+**CareFlow** is a production-style data engineering project that simulates a real-world healthcare analytics workflow. It demonstrates the full lifecycle of data — from ingestion in a cloud data lake, through ETL processing and warehousing, to machine learning predictions and business intelligence dashboards.
+
+> **Built to showcase**: Data Engineering, ETL Design, Cloud Integration, SQL Analytics, ML Pipelines, and Data Visualization — the core skills expected in Data Engineer and ML Engineer roles.
+
+---
+
+## 🏗️ Architecture
 
 ```
-Healthcare Dataset (CSV)
-        │
-        ▼
-   AWS S3 (Raw Data Storage)
-        │
-        ▼
-   Python ETL (Pandas)
-   ├── Extract
-   ├── Transform (Clean + Feature Engineering)
-   └── Load
-        │
-        ▼
-   MySQL Database (patients table)
-        │
-        ├──────────────────┐
-        ▼                  ▼
-   SQL Analytics      Random Forest Model
-        │                  │
-        └──────┬───────────┘
-               ▼
-       Streamlit Dashboard
+┌─────────────────────────────────────────────────────────────┐
+│                    CareFlow Pipeline                        │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│   📂 Raw CSV (10K records)                                  │
+│        │                                                    │
+│        ▼                                                    │
+│   ☁️  AWS S3 ──────────── Data Lake (Raw Zone)              │
+│        │                                                    │
+│        ▼                                                    │
+│   🔄 ETL Pipeline (Python + Pandas)                         │
+│        ├── Extract   → Read from S3 / local CSV             │
+│        ├── Transform → Clean, standardize, feature eng.     │
+│        └── Load      → Parameterized insert into MySQL      │
+│        │                                                    │
+│        ▼                                                    │
+│   🗄️  MySQL Database ─── Structured Storage                 │
+│        │                                                    │
+│        ├──────────────────────────┐                         │
+│        ▼                          ▼                         │
+│   📊 SQL Analytics           🤖 ML Model                    │
+│   (5 BI queries)             (Random Forest)                │
+│        │                          │                         │
+│        └──────────┬───────────────┘                         │
+│                   ▼                                         │
+│            📈 Streamlit Dashboard                           │
+│            (Live KPIs + Charts)                             │
+│                                                             │
+│   ⏰ Orchestration: Apache Airflow DAG                      │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-**Orchestration:** Apache Airflow DAG (optional)
+---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-| Category | Technology |
-|---|---|
-| Language | Python |
-| Data Processing | Pandas, NumPy |
-| Database | MySQL |
-| Cloud Storage | AWS S3 (boto3) |
-| Orchestration | Apache Airflow |
-| Machine Learning | Scikit-learn (Random Forest) |
-| Dashboard | Streamlit |
-| Visualization | Matplotlib |
+| Layer | Technology | Purpose |
+|:------|:-----------|:--------|
+| **Language** | Python 3.10+ | Core pipeline logic |
+| **Data Processing** | Pandas, NumPy | Transformation & feature engineering |
+| **Cloud Storage** | AWS S3 (boto3) | Data lake — raw data ingestion |
+| **Database** | MySQL | Structured data warehouse |
+| **Orchestration** | Apache Airflow | DAG-based pipeline scheduling |
+| **Machine Learning** | Scikit-learn | Random Forest classification |
+| **Dashboard** | Streamlit | Interactive analytics UI |
+| **Visualization** | Matplotlib | Charts & model evaluation plots |
+| **Config** | python-dotenv | Environment-based credential mgmt |
 
-## Folder Structure
+---
+
+## ✨ Key Features
+
+### 🔄 ETL Pipeline
+- **Extract** — Reads 10,000 patient records from CSV (locally or via S3 download)
+- **Transform** — Deduplication, null handling, text standardization, date parsing, and feature engineering (`length_of_stay`)
+- **Load** — Parameterized SQL inserts into MySQL with auto-schema creation
+
+### ☁️ AWS S3 Integration
+- Upload/download scripts for cloud-based data lake pattern
+- Environment-variable-driven configuration (no hardcoded credentials)
+
+### 📊 SQL Analytics
+Five business intelligence queries answering questions like:
+- What is the average billing amount across all patients?
+- Which medical conditions are most prevalent?
+- How do billing patterns differ by disease?
+
+### 🤖 Machine Learning
+- **Model**: Random Forest Classifier (100 estimators)
+- **Target**: Patient test results (Normal / Abnormal / Inconclusive)
+- **Features**: Age, gender, condition, admission type, insurance, billing, length of stay
+- **Evaluation**: Accuracy, ROC AUC (weighted, OVR), confusion matrix, classification report
+- **Persistence**: Model serialized via Joblib for downstream prediction
+
+### 📈 Interactive Dashboard
+Streamlit app displaying live KPIs (total patients, avg billing, model accuracy) and charts (admissions by type, disease distribution) — all powered by real-time MySQL queries.
+
+### ⏰ Airflow Orchestration
+Production-ready DAG definition with five sequential tasks mirroring the full pipeline, demonstrating workflow scheduling and dependency management.
+
+---
+
+## 📁 Project Structure
 
 ```
 healthcare-data-pipeline/
 │
-├── data/
-│   └── healthcare.csv          # Raw healthcare dataset (10,000 records)
-│
 ├── aws/
-│   ├── upload_to_s3.py         # Upload CSV to AWS S3
-│   └── download_from_s3.py     # Download CSV from S3
+│   ├── upload_to_s3.py            # Push raw data to S3
+│   └── download_from_s3.py        # Pull data from S3
 │
 ├── etl/
-│   ├── extract.py              # Read CSV into DataFrame
-│   ├── transform.py            # Clean, standardize, engineer features
-│   └── load.py                 # Insert records into MySQL
+│   ├── extract.py                 # Read CSV → DataFrame
+│   ├── transform.py               # Clean + feature engineering
+│   └── load.py                    # DataFrame → MySQL
 │
 ├── database/
-│   └── schema.sql              # MySQL table definition
+│   └── schema.sql                 # MySQL table definition
 │
 ├── sql/
-│   └── analytics.sql           # Analytical SQL queries
+│   └── analytics.sql              # 5 analytical queries
 │
 ├── ml/
-│   ├── train.py                # Train Random Forest classifier
-│   ├── predict.py              # Load model and make predictions
-│   ├── model.joblib            # Saved trained model (generated)
-│   └── metrics.json            # Model metrics (generated)
+│   ├── train.py                   # Train & evaluate model
+│   ├── predict.py                 # Inference with saved model
+│   ├── model.joblib               # Serialized model (generated)
+│   └── metrics.json               # Accuracy & ROC AUC (generated)
 │
 ├── airflow/
-│   └── healthcare_pipeline.py  # Airflow DAG definition
+│   └── healthcare_pipeline.py     # Airflow DAG definition
 │
 ├── dashboard/
-│   └── app.py                  # Streamlit dashboard
+│   └── app.py                     # Streamlit dashboard
 │
-├── run_pipeline.py             # Local pipeline runner (recommended)
-├── requirements.txt            # Python dependencies
-├── .env.example                # Environment variable template
-├── .gitignore                  # Git ignore rules
-└── README.md                   # This file
+├── data/
+│   └── healthcare.csv             # Source dataset (10K records)
+│
+├── run_pipeline.py                # One-command pipeline runner
+├── requirements.txt               # Python dependencies
+├── .env.example                   # Environment variable template
+└── README.md
 ```
 
-## Installation
+---
 
-### 1. Clone the Repository
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.10+
+- MySQL Server
+- AWS account *(optional — pipeline works locally without S3)*
+
+### 1. Clone & Install
 
 ```bash
-git clone https://github.com/yourusername/healthcare-data-pipeline.git
-cd healthcare-data-pipeline
-```
-
-### 2. Install Dependencies
-
-```bash
+git clone https://github.com/popeyepie1211/CareFlow.git
+cd CareFlow/healthcare-data-pipeline
 pip install -r requirements.txt
 ```
 
-### 3. Configure Environment
+### 2. Configure Environment
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` and fill in your credentials.
+Edit `.env` with your credentials:
 
-## AWS S3 Configuration
+```env
+# MySQL
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=your_password
 
-1. Create an AWS account and an S3 bucket.
-2. Generate an Access Key from IAM.
-3. Update `.env` with your credentials:
-
-```
+# AWS (optional)
 AWS_ACCESS_KEY_ID=your_key
 AWS_SECRET_ACCESS_KEY=your_secret
 AWS_REGION=ap-south-1
 S3_BUCKET_NAME=your-bucket-name
 ```
 
-4. Upload data to S3:
-
-```bash
-python aws/upload_to_s3.py
-```
-
-5. Download data from S3:
-
-```bash
-python aws/download_from_s3.py
-```
-
-## MySQL Configuration
-
-1. Install MySQL and start the server.
-2. Update `.env` with your MySQL credentials:
-
-```
-MYSQL_HOST=localhost
-MYSQL_PORT=3306
-MYSQL_USER=root
-MYSQL_PASSWORD=your_password
-MYSQL_DATABASE=healthcare_db
-```
-
-3. (Optional) Create the database manually:
-
-```bash
-mysql -u root -p < database/schema.sql
-```
-
-The pipeline will also create the database and table automatically.
-
-## Running the Pipeline
-
-### Option 1: Local Runner (Recommended)
+### 3. Run the Pipeline
 
 ```bash
 python run_pipeline.py
 ```
 
-This executes the complete pipeline:
-- Extract → Transform → Load → SQL Analytics → Train Model
+This executes the complete pipeline in sequence:
 
-### Option 2: Apache Airflow
+```
+Extract → Transform → Load → SQL Analytics → Train Model
+```
 
-The project includes an Airflow DAG at `airflow/healthcare_pipeline.py` that orchestrates the same pipeline.
-
-To use it:
-
-1. Install Airflow: `pip install apache-airflow`
-2. Copy the DAG to your Airflow dags folder
-3. Start the Airflow webserver and scheduler
-4. Trigger the `healthcare_data_pipeline` DAG
-
-> **Note:** The local runner (`run_pipeline.py`) is provided for easy demonstration. The Airflow DAG demonstrates orchestration concepts and is suitable for production-style scheduling.
-
-## Running the Dashboard
+### 4. Launch the Dashboard
 
 ```bash
 streamlit run dashboard/app.py
 ```
 
-The dashboard displays:
-- Total Patients, Average Billing, Most Common Disease
-- Model Accuracy and ROC AUC Score
-- Admissions by Type chart
-- Disease Distribution chart
+### 5. (Optional) Airflow Orchestration
 
-## Pipeline Details
+```bash
+pip install apache-airflow
+# Copy airflow/healthcare_pipeline.py to your Airflow dags/ folder
+# Start scheduler + webserver, then trigger the DAG
+```
 
-### ETL Process
+---
 
-| Step | File | Description |
-|---|---|---|
-| Extract | `etl/extract.py` | Reads 10,000 patient records from CSV |
-| Transform | `etl/transform.py` | Removes duplicates, handles missing values, standardizes text, engineers `length_of_stay` feature |
-| Load | `etl/load.py` | Inserts cleaned data into MySQL using parameterized queries |
+## 📊 Pipeline Output
 
-### SQL Analytics
+| Metric | Value |
+|:-------|:------|
+| Records Processed | 10,000+ |
+| Transformations | 6 (dedup, nulls, dates, text, columns, features) |
+| SQL Analytics Queries | 5 |
+| ML Model | Random Forest (100 trees) |
+| Evaluation | Accuracy + ROC AUC + Confusion Matrix |
+| Dashboard KPIs | 5 live metrics |
 
-Five analytical queries in `sql/analytics.sql`:
-1. Average Billing Amount
-2. Most Common Disease
-3. Admissions by Type
-4. Insurance Provider Distribution
-5. Average Billing by Disease
+---
 
-### Machine Learning
+## 🗺️ Roadmap
 
-- **Algorithm:** Random Forest Classifier
-- **Target:** Test Result (Normal / Abnormal / Inconclusive)
-- **Features:** Age, Gender, Medical Condition, Admission Type, Insurance Provider, Billing Amount, Length of Stay
-- **Evaluation:** Accuracy, ROC AUC, Confusion Matrix, Classification Report
-- **Model Persistence:** Saved using Joblib
+- [ ] Data validation layer with Great Expectations
+- [ ] Incremental loading (CDC pattern) instead of full reload
+- [ ] Structured logging with Python's `logging` module
+- [ ] CI/CD pipeline with GitHub Actions
+- [ ] Data versioning with DVC
+- [ ] Scale transforms with Apache Spark
+- [ ] Deploy to AWS with S3 triggers + Lambda
 
-## Resume Highlights
+---
 
-- Built an **end-to-end data engineering pipeline** processing 10,000+ healthcare records
-- Implemented **ETL pipeline** using Python and Pandas with data cleaning, standardization, and feature engineering
-- Designed **AWS S3** integration for raw data ingestion (Data Lake pattern)
-- Created **MySQL** database schema and loaded data using parameterized SQL queries
-- Wrote **SQL analytics** queries for business intelligence insights
-- Trained a **Random Forest** classifier and persisted the model using Joblib
-- Orchestrated pipeline tasks using **Apache Airflow** DAG with PythonOperator
-- Built an interactive **Streamlit dashboard** for pipeline result visualization
-- Followed **Data Engineering best practices**: environment-based configuration, modular code, separation of concerns
-
-## Interview Questions
-
-1. **Walk me through your data pipeline architecture.**
-2. **How did you handle data cleaning in the ETL process?**
-3. **Why did you choose MySQL over other databases?**
-4. **How does your Airflow DAG orchestrate the pipeline?**
-5. **What feature engineering did you perform?**
-6. **How do you handle credentials and configuration?**
-7. **What would you change for a production deployment?**
-8. **How would you scale this pipeline for larger datasets?**
-9. **Explain your SQL analytics queries and what insights they provide.**
-10. **How did you evaluate your machine learning model?**
-
-## Future Improvements
-
-- Add **data validation** using Great Expectations
-- Implement **incremental loading** instead of full table reload
-- Add **logging** with Python's logging module
-- Deploy to **AWS** with S3 triggers and Lambda functions
-- Add **unit tests** for ETL functions
-- Implement **CI/CD** pipeline with GitHub Actions
-- Add **data versioning** with DVC
-- Scale with **Apache Spark** for larger datasets
-
-## License
+## 📄 License
 
 This project is for educational and portfolio purposes.
+
+---
+
+<div align="center">
+
+**Built with ❤️ by [Ashwin](https://github.com/popeyepie1211)**
+
+*If you found this useful, consider giving it a ⭐*
+
+</div>
