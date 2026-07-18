@@ -249,7 +249,7 @@ This project is for educational and portfolio purposes.
 
 <div align="center">
 
-**Built with ❤️ by [Ashwin](https://github.com/popeyepie1211)**
+**Built with ❤️ by [Arya](https://github.com/popeyepie1211)**
 
 *If you found this useful, consider giving it a ⭐*
 
